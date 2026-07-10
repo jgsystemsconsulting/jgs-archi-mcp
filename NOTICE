@@ -1,0 +1,13 @@
+Archi MCP Server
+Copyright (c) 2026 JG Systems Consulting Ltd
+
+This product is a fork of archi-mcp-server (github.com/fanievh/archi-mcp-server),
+Copyright (c) 2026 JS van Heerden, used and modified under the terms of the MIT
+License (see LICENSE).
+
+JG Systems Consulting Ltd maintains this fork from v1.3.0 onward: new tools,
+layout/routing engine work, mutation safety hardening, and the prompts/ library
+are original contributions of this fork, released under the same MIT License.
+
+Third-party components are declared in the plugin's OSGi manifest and build
+files; no third-party source is vendored into this repository.

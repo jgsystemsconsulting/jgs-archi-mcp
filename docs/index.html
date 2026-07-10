@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JGS Archi Bridge - live ArchiMate models for AI agents</title>
+<meta name="description" content="An Archi plugin that gives AI agents live, undo-able write access to your open ArchiMate model over MCP: 69 tools, native CommandStack undo, loopback-only default, human approval gate.">
+<link rel="canonical" href="https://jgsystemsconsulting.github.io/jgs-archi-mcp/">
+<meta property="og:title" content="JGS Archi Bridge">
+<meta property="og:description" content="An Archi plugin that gives AI agents live, undo-able write access to your open ArchiMate model over MCP. 69 tools, native undo, loopback default, human approval gate.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JGS Archi Bridge">
+<meta name="twitter:description" content="Live, undo-able AI write access to your open ArchiMate model in Archi, over the Model Context Protocol. From JG Systems Consulting Ltd.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "JGS Archi Bridge",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Windows, macOS, Linux (any platform running Archi 5.7+ on Java 21+)",
+  "softwareVersion": "1.0.0",
+  "url": "https://jgsystemsconsulting.github.io/jgs-archi-mcp/",
+  "downloadUrl": "https://github.com/jgsystemsconsulting/jgs-archi-mcp/releases",
+  "description": "An Eclipse PDE plugin for Archi that embeds an HTTP server speaking the Model Context Protocol, so an MCP-compatible AI agent can query, search, analyse, and directly mutate the currently open ArchiMate model. Every write is routed through Archi's own CommandStack, so agent changes are undo-able with Ctrl+Z, and a human-owned approval gate can queue changes for review before they apply.",
+  "license": "https://github.com/jgsystemsconsulting/jgs-archi-mcp/blob/main/LICENSE",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Organization",
+    "name": "JG Systems Consulting Ltd",
+    "url": "https://www.jgsystemsconsulting.com",
+    "email": "support@jgsystemsconsulting.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<style>
+@font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Inter';src:url('fonts/Inter-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Inter';src:url('fonts/Inter-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+:root{
+  --ink:#0a0a0b;--ink-2:#111113;--ink-3:#16171a;--ink-4:#1e2024;
+  --line:#2a2d33;--line-2:#3a3e46;
+  --mute:#6b7078;--mute-2:#8b9099;
+  --text:#c7ccd3;--text-hi:#e8ebf0;
+  --paper:#f4f2ec;--paper-ink:#0a0a0b;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --sans:'Inter',ui-sans-serif,system-ui,sans-serif;
+  --pad-x:clamp(24px,4vw,80px);--pad-section:clamp(48px,6vw,96px);
+}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--pad-x)}
+a{color:var(--text-hi);overflow-wrap:anywhere}
+p{overflow-wrap:break-word}
+h1,h2,h3,.label{font-family:var(--mono);letter-spacing:-0.02em;color:var(--text-hi)}
+h1{font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.1;margin:0 0 1rem}
+h2{font-size:clamp(1.3rem,2.6vw,1.8rem);margin:0 0 1rem}
+p{max-width:72ch}
+.label{font-size:0.6875rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--mute-2)}
+.masthead{position:sticky;top:0;z-index:50;background:var(--ink);display:flex;flex-wrap:wrap;gap:1.5rem;align-items:baseline;border-bottom:1px solid var(--line);padding:1rem 0;font-family:var(--mono);font-size:0.6875rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mute)}
+section{padding:var(--pad-section) 0;border-bottom:1px solid var(--line)}
+.sec-num{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--mute-2);font-size:0.75rem;margin-bottom:1.5rem}
+.grid{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.cell{background:var(--ink-2);padding:1.5rem;min-width:0}
+.cell h3{margin:0 0 .5rem;font-size:1rem}
+.cell p{margin:0 0 .6rem}
+.cell p:last-child{margin-bottom:0}
+@media(min-width:861px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:repeat(2,1fr)}
+/* fill trailing empty tracks: a row's last cell stretches to the grid edge */
+.grid-3>.cell:last-child:nth-child(3n+1){grid-column:span 3}
+.grid-3>.cell:last-child:nth-child(3n+2){grid-column:span 2}}
+.btn{display:inline-block;font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;font-size:0.75rem;padding:.7rem 1.1rem;border:1px solid var(--line);background:var(--paper);color:var(--paper-ink);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--text-hi)}
+.tier{font-family:var(--mono);font-size:0.625rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mute)}
+.masthead nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:1.25rem}
+.masthead nav a{color:var(--mute);text-decoration:none}
+.masthead nav a:hover{color:var(--text-hi)}
+.lede{font-size:1.05rem;color:var(--text-hi);max-width:66ch}
+.sub{color:var(--mute);max-width:70ch}
+.actions{margin:1.75rem 0 0;display:flex;flex-wrap:wrap;gap:.75rem}
+.specs{margin-top:2rem;font-family:var(--mono);font-size:0.6875rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:1.25rem 2rem}
+.specs b{color:var(--text-hi);font-weight:700}
+.steps{list-style:none;margin:0;padding:0;counter-reset:step;display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.steps li{background:var(--ink-2);padding:1.5rem;counter-increment:step;position:relative;min-width:0}
+.steps li::before{content:counter(step,decimal-leading-zero);font-family:var(--mono);font-weight:700;color:var(--mute-2);font-size:0.75rem;letter-spacing:0.12em;display:block;margin-bottom:.6rem}
+.steps h3{margin:0 0 .5rem;font-size:1rem}
+.steps p{margin:0;color:var(--text)}
+.quote{border:1px solid var(--line);background:var(--ink-2);padding:1.5rem;margin:0}
+.quote p{margin:0 0 .6rem}
+.quote p:last-child{margin-bottom:0}
+.quote .who{font-family:var(--mono);font-size:0.6875rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mute-2)}
+code,kbd{font-family:var(--mono);font-size:0.85em;background:var(--ink-4);color:var(--text-hi);padding:.1em .4em;border:1px solid var(--line);overflow-wrap:anywhere}
+pre{max-width:100%;margin:1rem 0 0;padding:1rem 1.25rem;background:var(--ink-2);border:1px solid var(--line);overflow-x:auto;font-family:var(--mono);font-size:0.8125rem;line-height:1.7;color:var(--text-hi)}
+pre code{background:none;border:none;padding:0;font-size:inherit;overflow-wrap:normal;white-space:pre}
+.note{color:var(--mute);font-size:0.875rem;max-width:70ch}
+footer{padding:var(--pad-section) 0;font-family:var(--mono);font-size:0.6875rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:1.5rem}
+footer a{color:var(--mute);text-decoration:none}
+footer a:hover{color:var(--text-hi)}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--text-hi);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <span>CLASSIFICATION: PUBLIC</span>
+    <span>LICENCE: MIT</span>
+    <span>DOC-ID: JGSC-ARCHI-MCP</span>
+    <span>REV 1.0.0</span>
+    <nav>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#install">Install</a>
+      <a href="#security">Security</a>
+      <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp">GitHub</a>
+      <a href="https://labs.jgsystemsconsulting.com">More from JGS &rarr;</a>
+    </nav>
+  </header>
+
+  <section id="home">
+    <div class="sec-num">&sect; 00 - JGS ARCHI BRIDGE</div>
+    <h1>AI agents that edit your live ArchiMate model, not a copy of it.</h1>
+    <p class="lede">JGS Archi Bridge is an Eclipse plugin for <a href="https://www.archimatetool.com/">Archi</a> that
+    embeds an HTTP server speaking the <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> inside a
+    running Archi instance. Any MCP-compatible agent (Claude Code, Cline, LM Studio) can then query, search, analyse,
+    and directly change the ArchiMate model you have open, in the same session, on the same screen.</p>
+    <p class="sub">Every write goes through Archi's own CommandStack, so an agent's change is undone with
+    <kbd>Ctrl+Z</kbd> exactly like a manual edit. A human-owned approval gate can hold changes for review before they
+    apply. The default bind is loopback only, so nothing leaves your machine.</p>
+    <div class="actions">
+      <a class="btn" href="#install">Install &rarr;</a>
+      <a class="btn ghost" href="https://github.com/jgsystemsconsulting/jgs-archi-mcp">Source &rarr;</a>
+      <a class="btn ghost" href="#how-it-works">How it works &rarr;</a>
+    </div>
+    <div class="specs">
+      <span><b>69</b> MCP tools</span>
+      <span><b>14</b> MCP resources</span>
+      <span>Archi <b>5.7+</b></span>
+      <span>Java <b>21+</b></span>
+      <span><b>MIT</b> licensed</span>
+      <span><b>4,082</b> tests / <b>181</b> classes</span>
+    </div>
+  </section>
+
+  <section id="how-it-works">
+    <div class="sec-num">&sect; 01 - HOW IT WORKS</div>
+    <h2>The agent drives Archi, live, through Archi's own edit engine.</h2>
+    <p>Most tooling that connects an AI agent to an ArchiMate model works on the file: it parses the exported XML,
+    computes a change, and writes a new file back. JGS Archi Bridge does not do that. It runs a small HTTP server
+    inside the Archi process, so the agent operates on the model you already have open, while you have it open. There
+    is no export step, no re-import, and no second copy to reconcile.</p>
+    <ol class="steps">
+      <li>
+        <h3>Archi keeps running</h3>
+        <p>You start the server from Archi's own menu (<code>MCP Server &gt; Start MCP Server</code>) with your model
+        open. Your GUI stays exactly where it is. The server listens on <code>http://127.0.0.1:18090/mcp</code> by
+        default and answers over the standard MCP protocol.</p>
+      </li>
+      <li>
+        <h3>The agent reads and proposes changes</h3>
+        <p>Reads (search, traversal, view inspection) run straight off Archi's in-memory model on the server's own
+        threads. Writes are dispatched onto Archi's SWT UI thread via <code>Display.syncExec()</code> and executed as
+        commands on Archi's native CommandStack, the same stack a human edit uses.</p>
+      </li>
+      <li>
+        <h3>Changes appear on your canvas</h3>
+        <p>Because the mutation runs through Archi's real command layer, a new element, a re-routed connection, or a
+        whole composed view shows up on your diagram immediately, correctly styled, exactly as if you had drawn it.</p>
+      </li>
+      <li>
+        <h3>You stay in control of the timeline</h3>
+        <p>Every agent change is a command on the undo stack. <kbd>Ctrl+Z</kbd> reverts it. The agent's own
+        <code>undo</code>/<code>redo</code> tools are scoped to the agent's changes and refuse to cross a human edit,
+        so an agent can never silently roll back work you drew by hand.</p>
+      </li>
+    </ol>
+    <p class="note">Concretely: the model is never serialised out and read back to make a change. The trust boundary
+    is a loopback HTTP port, and the edit boundary is Archi's CommandStack. That is why undo, redo, and validation
+    behave identically for agent and human edits.</p>
+  </section>
+
+  <section id="why">
+    <div class="sec-num">&sect; 02 - WHY LIVE-SESSION CONTROL</div>
+    <h2>Why this beats parsing the file offline.</h2>
+    <div class="grid grid-3">
+      <div class="cell">
+        <h3>Native undo, not a diff to reconcile</h3>
+        <p>File-parsing tools (coArchi2-style) compute a change against an exported model and hand you a new file.
+        You then merge or reload, and your undo history is gone. Here the agent's change is a first-class command on
+        Archi's stack: undo it, redo it, or keep editing on top of it without leaving Archi.</p>
+      </div>
+      <div class="cell">
+        <h3>Validation parity with Archi</h3>
+        <p>Mutations are never stricter nor more forgiving than Archi itself. A relationship the GUI would reject is
+        rejected here, with a structured error citing the relevant ArchiMate 3.2 specification section. The agent
+        cannot coerce the model into a state Archi would not allow.</p>
+      </div>
+      <div class="cell">
+        <h3>One source of truth</h3>
+        <p>There is no exported copy drifting out of sync with what is on your screen. The agent reads and writes the
+        live model, so what it sees, what you see, and what gets saved are the same object.</p>
+      </div>
+      <div class="cell">
+        <h3>Views the agent can actually lay out</h3>
+        <p>The server carries a full layout and routing pipeline (ELK layered layout, orthogonal connection routing,
+        a layout-quality assessor). The agent does not just create elements: it composes readable diagrams and can
+        measure whether the result is legible before showing it to you.</p>
+      </div>
+      <div class="cell">
+        <h3>Trust before you hand over write access</h3>
+        <p>The approval gate defaults to GATED on a fresh install (fail safe). An agent acting on untrusted input,
+        say a prompt-injected document, cannot apply a destructive change without your explicit approval in Archi.
+        You review a plain-language card and decide.</p>
+      </div>
+      <div class="cell">
+        <h3>Local by default</h3>
+        <p>The server binds to <code>127.0.0.1</code> and validates the <code>Origin</code>/<code>Host</code> header,
+        so a remote host cannot reach it and a browser page cannot drive it. Optional TLS and an opt-in bearer token
+        are there when you need them, but the default posture is closed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities">
+    <div class="sec-num">&sect; 03 - CAPABILITIES</div>
+    <h2>What the 69 tools let an agent do.</h2>
+    <p class="sub">Grouped by function. Each group is a set of MCP tools the agent calls in natural conversation, plus
+    14 reference resources (ArchiMate layer and relationship guides, viewpoint recipes, workflow prompts) the agent
+    fetches to model correctly.</p>
+    <div class="grid grid-3">
+      <div class="cell">
+        <h3>Query &amp; inspect</h3>
+        <p>Model overview, element and relationship retrieval, multi-hop relationship traversal, view contents with
+        full styling read-back, and reverse where-used lookup.</p>
+        <p class="tier">Example</p>
+        <p><i>"What applications support the Customer Portal capability?"</i> The agent searches elements, traverses
+        relationships, and returns the supporting components.</p>
+      </div>
+      <div class="cell">
+        <h3>Search &amp; discovery</h3>
+        <p>Full-text search across names, documentation, and properties with type, layer, and specialization filters.
+        Discovery-first create tools avoid duplicating an element that already exists.</p>
+        <p class="tier">Example</p>
+        <p><i>"Find all Application Services in the model"</i> or <i>"Show me the relationships between the CRM and ERP
+        systems."</i></p>
+      </div>
+      <div class="cell">
+        <h3>Create &amp; update</h3>
+        <p>Create and update elements, relationships, views, and the model itself, with ArchiMate rule enforcement,
+        duplicate detection, specializations (IS-A subtypes), and folder management.</p>
+        <p class="tier">Example</p>
+        <p><i>"Create a new view showing the payment processing flow"</i> builds the elements, wires the
+        relationships, and places them on a fresh diagram.</p>
+      </div>
+      <div class="cell">
+        <h3>View composition</h3>
+        <p>Place elements, groups, notes, image nodes, and view references onto diagrams; nest containers with an
+        auto-receding backdrop; anchor an object to follow a container as it grows; style every visual.</p>
+        <p class="tier">Example</p>
+        <p><i>"Add the fraud engine to this view and connect it to the payment gateway"</i> places and links the
+        visual in one step.</p>
+      </div>
+      <div class="cell">
+        <h3>Layout &amp; routing</h3>
+        <p>ELK-backed automatic layout, orthogonal connection routing, group arrangement, hub sizing, and
+        density-aware spacing tools that self-terminate honestly rather than looping.</p>
+        <p class="tier">Example</p>
+        <p><i>"Auto-layout and route the connections on this view"</i> computes positions and clean orthogonal paths
+        in a single atomic operation.</p>
+      </div>
+      <div class="cell">
+        <h3>Layout assessment</h3>
+        <p>A layout-quality assessor rates a view across overlap, crossing, terminal, spacing, and hub-port metrics,
+        and reports a coverage map so a done-gate knows what was actually checked.</p>
+        <p class="tier">Example</p>
+        <p><i>"Is this diagram readable, and what should I fix?"</i> returns a tiered rating with the specific tool to
+        run for each defect.</p>
+      </div>
+      <div class="cell">
+        <h3>Export &amp; images</h3>
+        <p>Render any view to PNG, JPG, SVG, or PDF, inline or to file, each render stamped with the model's mutation
+        version so a stale image is detectable. Import icons into the model archive.</p>
+        <p class="tier">Example</p>
+        <p><i>"Export the landscape view as an SVG"</i> writes a vector render you can drop into a document.</p>
+      </div>
+      <div class="cell">
+        <h3>Batch &amp; undo</h3>
+        <p>Group mutations into atomic transactions, run compound <code>bulk-mutate</code> commands with
+        back-references, and undo or redo agent changes as scoped, native command-stack operations.</p>
+        <p class="tier">Example</p>
+        <p><i>"Undo the last three changes you made"</i> reverts only the agent's own edits, stopping at any human
+        edit on the stack.</p>
+      </div>
+      <div class="cell">
+        <h3>Approval workflow</h3>
+        <p>When you turn on Approval Mode, the agent's mutations queue as pending instead of applying. The agent can
+        only observe that it is gated; it cannot approve its own changes. You decide in Archi.</p>
+        <p class="tier">Example</p>
+        <p>The agent calls <code>list-pending-approvals</code>, sees its changes are held, and tells you to confirm
+        them in the Pending Approvals dock.</p>
+      </div>
+    </div>
+    <p class="note" style="margin-top:1.5rem">Full tool and resource reference is in the
+    <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp#available-tools">README</a>. The plugin also ships a
+    <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp/tree/main/prompts">prompt library</a>, including
+    <code>repo-to-archimate-model.md</code> (also the <code>/repo-to-archi</code> Claude Code slash command), which
+    reverse-engineers a code repository into a full, evidence-marked ArchiMate 3.2 model.</p>
+  </section>
+
+  <section id="value">
+    <div class="sec-num">&sect; 04 - WHO IT IS FOR</div>
+    <h2>For architects who use Archi and want AI help they can trust.</h2>
+    <p>If you are an enterprise architect or systems engineer who already models in Archi, the appeal of an AI agent
+    is obvious: describe a change, get it drafted. The hesitation is equally obvious: you are handing a language model
+    write access to a model that took real work to build, and one bad batch could corrupt it.</p>
+    <p>This tool is designed around that hesitation, not around a demo. Three properties make the difference:</p>
+    <div class="grid grid-3">
+      <div class="cell">
+        <h3>Every change is reversible</h3>
+        <p>Agent edits are commands on Archi's undo stack. If a result is wrong, <kbd>Ctrl+Z</kbd> takes it back. You
+        are never one step from an unrecoverable state.</p>
+      </div>
+      <div class="cell">
+        <h3>You can require sign-off</h3>
+        <p>With Approval Mode on, nothing the agent writes touches the model until you approve it from a
+        plain-language card that names exactly what changes, with deletions called out.</p>
+      </div>
+      <div class="cell">
+        <h3>The model stays valid</h3>
+        <p>The server refuses any mutation Archi itself would refuse. The agent works within the ArchiMate
+        specification, not around it, so the model cannot be driven into an inconsistent state.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem">The result is a way to move from curiosity to daily use: start read-only, keep the
+    approval gate on, watch what the agent proposes, and open up write access on your own schedule once you trust it.
+    Nothing forces you further than you want to go, and nothing you do is irreversible.</p>
+  </section>
+
+  <section id="install">
+    <div class="sec-num">&sect; 05 - INSTALL &amp; GET STARTED</div>
+    <h2>Running in a few minutes.</h2>
+    <p class="sub">You need Archi 5.7 or later, Java 21 or later, and an MCP-compatible client. The condensed path is
+    below; the <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp#getting-started">README</a> covers every
+    client and every option in full.</p>
+    <ol class="steps">
+      <li>
+        <h3>Install the plugin</h3>
+        <p>Download the latest <code>.archiplugin</code> from
+        <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp/releases">Releases</a> (or the repo's
+        <code>bin/</code> directory). In Archi, use <code>Help &gt; Manage Plug-ins &gt; Install New...</code>, or
+        drop the file into Archi's <code>dropins/</code> folder. Restart Archi.</p>
+      </li>
+      <li>
+        <h3>Start the server</h3>
+        <p>Open an ArchiMate model, then choose <code>MCP Server &gt; Start MCP Server</code> from Archi's menu bar.
+        The default endpoint is <code>http://127.0.0.1:18090/mcp</code>. Port, bind address, TLS, and authentication
+        live under <code>Window &gt; Preferences &gt; MCP Server</code>.</p>
+      </li>
+      <li>
+        <h3>Point your agent at it</h3>
+        <p>For Claude Code, one command connects it:</p>
+        <pre><code>claude mcp add --transport http archi http://127.0.0.1:18090/mcp</code></pre>
+        <p class="note" style="margin-top:.75rem">Claude Desktop needs a proxy (<code>uvx mcp-proxy</code>) because it
+        does not natively support Streamable HTTP. Cline and other clients point directly at the
+        Streamable-HTTP endpoint (<code>/mcp</code>), or the SSE endpoint (<code>/sse</code>) for older clients.</p>
+      </li>
+      <li>
+        <h3>Ask in plain language</h3>
+        <p>With the server running and the client connected, describe what you want: <i>"Give me an overview of this
+        architecture model"</i>, <i>"What does the Order Processing component depend on?"</i>, or <i>"Create a view
+        showing the payment processing flow and lay it out."</i></p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="security">
+    <div class="sec-num">&sect; 06 - SECURITY &amp; TRUST</div>
+    <h2>The threat model in one sentence.</h2>
+    <blockquote class="quote">
+      <p style="color:var(--text-hi);max-width:70ch">The threat is not the hostile internet. It is other local
+      processes on your machine, LAN neighbours after one preference change, and a prompt-injected agent, and the
+      mitigations are sized for exactly those.</p>
+      <p class="who">From SECURITY.md</p>
+    </blockquote>
+    <p style="margin-top:1.75rem">Because the server exposes mutating and file-touching tools over HTTP, the trust
+    boundary is stated plainly. Three controls are the headline, and all are on with zero configuration:</p>
+    <div class="grid grid-3">
+      <div class="cell">
+        <h3>Loopback-only bind</h3>
+        <p>The default bind address is <code>127.0.0.1</code>, so the port is not reachable from the network.
+        <code>Origin</code>/<code>Host</code> validation rejects a browser page trying to drive the tools via
+        DNS-rebinding. Binding off-loopback is opt-in and warned about.</p>
+      </div>
+      <div class="cell">
+        <h3>Human-owned approval gate</h3>
+        <p>A fresh install defaults to GATED (fail safe). The agent has no tool to ungate itself or approve its own
+        changes; it can only observe that it is gated. Turning the gate off requires a desktop confirmation in Archi.</p>
+      </div>
+      <div class="cell">
+        <h3>Native undo, scoped</h3>
+        <p>Every mutation is undoable through Archi's CommandStack. The agent's <code>undo</code>/<code>redo</code>
+        stop at, and refuse to cross, any human edit, so the agent cannot silently revert your hand-drawn work.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.75rem">Optional hardening is yours to enable when the deployment calls for it: TLS with a
+    self-signed or supplied certificate, and an opt-in 256-bit bearer token. Both secrets (the token and the keystore
+    password) are stored in your OS keychain via Equinox secure storage (macOS Keychain, Windows Credential Store),
+    never in cleartext on disk; the server fails closed rather than falling back to plaintext. If you bind
+    off-loopback, securing the surface (firewall, TLS, bearer token) becomes your responsibility, and the preferences
+    page warns you at the moment you cross that line.</p>
+    <p class="note" style="margin-top:1rem">Read the full
+    <a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp/blob/main/SECURITY.md">SECURITY.md</a> before
+    binding off-loopback or pointing an agent at untrusted input. It states, control by control, what is protected by
+    default, what is your responsibility as operator, and how to report a vulnerability.</p>
+  </section>
+
+  <section id="about">
+    <div class="sec-num">&sect; 07 - ABOUT</div>
+    <h2>Maintained by JG Systems Consulting Ltd.</h2>
+    <p>JG Systems Consulting Ltd is an independent systems architecture and MBSE (model-based systems engineering)
+    consultancy. We work inside client organisations on real enterprise-architecture and systems-engineering
+    programmes, in tools like Archi, CATIA Magic, and Sparx Enterprise Architect, not in a research lab. Archi MCP
+    Server exists because we needed it ourselves: a way to let an AI agent work inside a live architecture model
+    without breaking the model, the audit trail, or the architect's trust in either.</p>
+    <p>That practitioner origin shapes the whole design. The approval gate, the loopback-only default, and routing
+    every mutation through Archi's own <code>CommandStack</code> instead of a bespoke undo system are not features
+    added to look responsible for a demo. They are what we require before we let an agent near a client's model, and
+    what we ship by default here.</p>
+    <p>The plugin is MIT licensed and open source. It was forked from
+    <a href="https://github.com/fanievh/archi-mcp-server">fanievh/archi-mcp-server</a>, and JG Systems Consulting Ltd
+    has maintained and extended it: the layout and routing engine, the assessment tooling, specialization
+    and view-composition support, and the mutation-safety model are original work from this fork, released under the
+    same licence. Every push runs the full test suite (4,082 tests across 181 classes) on GitHub Actions.</p>
+    <p>This is one of a family of local-first, agent-friendly tools we build and open-source alongside our consulting
+    work: bridges and skills that bring AI agents to real engineering models, on the architect's own machine, with
+    nothing sent to the cloud. Most are free to use; a few are licensed. See the rest at
+    <a href="https://labs.jgsystemsconsulting.com">labs.jgsystemsconsulting.com</a>, or get in touch about an
+    architecture or MBSE engagement at <a href="https://www.jgsystemsconsulting.com">www.jgsystemsconsulting.com</a>.</p>
+    <div class="actions">
+      <a class="btn" href="https://github.com/jgsystemsconsulting/jgs-archi-mcp">GitHub &rarr;</a>
+      <a class="btn ghost" href="https://labs.jgsystemsconsulting.com">JGS Labs &rarr;</a>
+      <a class="btn ghost" href="https://www.jgsystemsconsulting.com">Consulting &rarr;</a>
+      <a class="btn ghost" href="mailto:support@jgsystemsconsulting.com">Contact &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; JG Systems Consulting Ltd</span>
+    <span><a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp/blob/main/LICENSE">MIT Licence</a></span>
+    <span><a href="https://github.com/jgsystemsconsulting/jgs-archi-mcp">GitHub</a></span>
+    <span><a href="https://labs.jgsystemsconsulting.com">JGS Labs</a></span>
+    <span><a href="mailto:support@jgsystemsconsulting.com">support@jgsystemsconsulting.com</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

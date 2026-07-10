@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "JGS Archi Bridge"
+version: 1.0.0
+date-released: 2026-07-05
+url: "https://github.com/jgsystemsconsulting/jgs-archi-mcp"
+repository-code: "https://github.com/jgsystemsconsulting/jgs-archi-mcp"
+license: MIT
+type: software
+authors:
+  - name: "JG Systems Consulting Ltd"
+    website: "https://www.jgsystemsconsulting.com"
+  - name: "JS van Heerden"
+    website: "https://github.com/fanievh"
+identifiers:
+  - type: url
+    value: "https://github.com/fanievh/archi-mcp-server"
+    description: "Original upstream project"

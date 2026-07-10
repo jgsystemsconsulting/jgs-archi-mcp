@@ -1,0 +1,10 @@
+Product:      JGS Archi Bridge
+Version:      1.0.0
+Tag:          v1.0.0
+Release date: 2026-07-05
+Maintainer:   JG Systems Consulting Ltd
+Repository:   https://github.com/jgsystemsconsulting/jgs-archi-mcp
+Upstream:     https://github.com/fanievh/archi-mcp-server
+Requires:     Archi 5.7+, Java 21+
+Bundle:       jgs-archi-bridge_1.0.0.archiplugin (bin/)
+Source SHA (dev repo): 68e9414165e5981ee5048b9e3620d05c2802aeba
