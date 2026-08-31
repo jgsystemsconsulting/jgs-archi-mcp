@@ -30,6 +30,55 @@ The server provides **69 MCP tools** across querying, searching, creating, layou
 2. In Archi: **Help > Manage Plug-ins > Install New...** or copy to Archi's `dropins/` folder
 3. Restart Archi
 
+### Install with your AI agent
+
+The Bridge is the MCP plugin inside Archi. Viewpoint modelling with an agent also needs [jgs-archi-skills](https://github.com/jgsystemsconsulting/jgs-archi-skills). Copy the prompt below into your coding agent (ZCode, Claude Code, Cursor, or similar). It reads both READMEs and installs the plugin and the skills.
+
+The same prompt lives in the [jgs-archi-skills README](https://github.com/jgsystemsconsulting/jgs-archi-skills).
+
+```text
+Install and set up JGS Archi Bridge (MCP) and jgs-archi-skills. Read each README and follow it. Do not invent steps.
+
+Repositories:
+1. JGS Archi Bridge (Archi MCP plugin): https://github.com/jgsystemsconsulting/jgs-archi-mcp
+2. jgs-archi-skills (agent skill pack): https://github.com/jgsystemsconsulting/jgs-archi-skills
+
+Do this in order.
+
+A. Bridge (MCP)
+- Read that repo's README.md.
+- Prerequisites: Archi 5.7+, Java 21+.
+- Install the plugin as the README says: download the latest .archiplugin from Releases (or bin/), then in Archi use Help > Manage Plug-ins > Install New..., or copy it into Archi's dropins/ folder.
+- Restart Archi.
+- Open an ArchiMate model, then start the server: MCP Server > Start MCP Server.
+- Default endpoint: http://127.0.0.1:18090/mcp
+- Wire this agent to that endpoint using the README section for this host (ZCode, Claude Code CLI, Claude Desktop, Cline, or other). Example for Claude Code:
+    claude mcp add --transport http archi http://127.0.0.1:18090/mcp
+- Leave bind, TLS, and auth at README defaults unless the user asked otherwise.
+
+B. Skills
+- Clone or fetch https://github.com/jgsystemsconsulting/jgs-archi-skills
+- Read README.md and docs/skill-usage.md. If the host is not ZCode, also read docs/other-agents.md.
+- Prerequisites: Python 3.10+ (stdlib only; no pip packages), Archi + Bridge already running.
+- Detect the agent host and install:
+    python install.py --dry-run
+    python install.py                  # ZCode → ~/.zcode/skills/<skill>/
+    python install.py --agent claude   # Claude Code → ~/.claude/skills/jgs/<skill>/
+  Use --agent all only if the user wants every supported host. Wrappers: install.sh, install.ps1.
+- Confirm 14 skills landed (count matches SKILLS.md). Flag any step you cannot perform.
+- Note the MIT licence in LICENSE.
+
+C. Tell the user when you finish
+- Restart Archi if the plugin was just installed.
+- Fully restart this agent session (ZCode, Claude Code, Cursor, or other) so it rediscovers skills and the MCP server. Quit and reopen the agent if skills or MCP tools do not appear.
+- Confirm Archi has a model open and the MCP menu shows Stop MCP Server (server is running).
+- How to run: /archi-orchestrator <plain-language intent>
+  Example: /archi-orchestrator invoice-to-cash capability map for finance and ops
+- Do not invoke layer specialists yourself. The orchestrator dispatches them after plan approval.
+
+If a step fails (plugin missing, port 18090 in use, Python missing, skills count wrong, MCP not listed), stop and report the exact failure and the README section that applies. Do not modify jgs-archi-mcp source.
+```
+
 ## Getting Started
 
 ### 1. Start the Server
