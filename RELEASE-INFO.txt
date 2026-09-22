@@ -7,4 +7,4 @@ Repository:   https://github.com/jgsystemsconsulting/jgs-archi-mcp
 Upstream:     https://github.com/fanievh/archi-mcp-server
 Requires:     Archi 5.7+, Java 21+
 Bundle:       jgs-archi-bridge_1.0.0.archiplugin (bin/)
-Source SHA (dev repo): 14961b429523bdb4d6e741c978716faff8003515
+Source SHA (dev repo): 5c5b3dcaca190cc53e7c4fc4512a14eeb84e639d

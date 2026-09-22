@@ -7,7 +7,7 @@ lookup; full behavioural detail, edge cases, and worked examples live in the
 [README's Available Tools section](../README.md#available-tools) and
 [`usage.md`](usage.md). For a tool's exact parameter names, types, and
 required fields, call the tool's `inputSchema` through any connected MCP
-client (`tools/list`) — this page intentionally does not restate JSON
+client (`tools/list`); this page intentionally does not restate JSON
 schemas, so it can never drift from what the server actually serves.
 
 ## Query & Model Inspection (6)

@@ -41,14 +41,14 @@
 
 ## Troubleshooting
 
-- **Server won't start** — check whether port 18090 is already in use
+- **Server won't start**: check whether port 18090 is already in use
   (`lsof -i :18090` on macOS/Linux, `netstat -ano | findstr :18090` on
   Windows), and confirm the bind address set in preferences is valid.
-- **LLM client can't connect** — confirm the Archi menu shows "Stop MCP
+- **LLM client can't connect**: confirm the Archi menu shows "Stop MCP
   Server" (meaning it's running), that the port in your client config
   matches, and re-run the `curl` command above to isolate the server from
   the client.
-- **Model appears empty** — an ArchiMate model must be open in Archi before
+- **Model appears empty**: an ArchiMate model must be open in Archi before
   a client connects; if you opened the model after the session started,
   reconnect the client.
 
