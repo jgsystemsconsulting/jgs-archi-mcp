@@ -2,6 +2,8 @@
 
 An Eclipse PDE plugin for [Archi](https://www.archimatetool.com/) that exposes ArchiMate models through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), enabling LLMs to query, analyse, and modify enterprise architecture models through natural language.
 
+**Documentation:** [Install](docs/install.md) · [Configuration](docs/configuration.md) · [Usage guide](docs/usage.md) · [Tool reference](docs/TOOL-REFERENCE.md) · [Licensing](docs/licensing.md)
+
 ## What It Does
 
 JGS Archi Bridge embeds an HTTP server inside Archi that speaks MCP. Once running, any MCP-compatible LLM client (Claude, Cline, LM Studio, etc.) can connect and interact with the currently open ArchiMate model: asking questions, searching elements, traversing relationships, composing view diagrams, and even creating or modifying model content.
@@ -78,6 +80,11 @@ C. Tell the user when you finish
 
 If a step fails (plugin missing, port 18090 in use, Python missing, skills count wrong, MCP not listed), stop and report the exact failure and the README section that applies. Do not modify jgs-archi-mcp source.
 ```
+
+## Related repositories
+
+This plugin is the instrument: tools, resources, ArchiMate language tables.
+Viewpoint modelling with an agent also needs [jgs-archi-skills](https://github.com/jgsystemsconsulting/jgs-archi-skills). Author-run Archi models and sequenced job pastes live in the public worked-example repository [jgs-archi-skills-we](https://github.com/jgsystemsconsulting/jgs-archi-skills-we), not in this plugin and not in the skill zip. Skills consume this Bridge. They never patch it.
 
 ## Getting Started
 
@@ -576,5 +583,8 @@ To recover, reset secure storage so Equinox can create a fresh master password:
 
 ## License
 
-This project is licensed under the MIT License.
-See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License, free to use, modify, and
+redistribute for any purpose. See [LICENSE](LICENSE) for details. For
+commercial support or questions about this fork, use JG Systems
+Consulting's [licensing enquiries page](https://labs.jgsystemsconsulting.com/licensing.html)
+(no purchase is required to use this software).

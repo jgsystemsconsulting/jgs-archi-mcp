@@ -1,0 +1,7 @@
+{
+  "name": "jgs-archi-mcp",
+  "owner": {"name": "JG Systems Consulting Ltd"},
+  "plugins": [
+    {"name": "jgs-archi-mcp", "source": ".", "description": "MCP bridge exposing ArchiMate models in Archi to AI agents"}
+  ]
+}

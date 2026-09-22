@@ -1,0 +1,8 @@
+{
+  "name": "jgs-archi-mcp",
+  "description": "MCP bridge exposing ArchiMate models in Archi to AI agents",
+  "version": "1.0.0",
+  "author": "JG Systems Consulting Ltd",
+  "repository": "https://github.com/jgsystemsconsulting/jgs-archi-mcp",
+  "license": "MIT"
+}

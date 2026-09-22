@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    {
+      "name": "jgs-archi-mcp",
+      "source": {"path": "./"},
+      "interface": {"displayName": "jgs-archi-mcp"},
+      "description": "MCP bridge exposing ArchiMate models in Archi to AI agents"
+    }
+  ]
+}

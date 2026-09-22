@@ -1,0 +1,5 @@
+{
+  "name": "jgs-archi-mcp",
+  "version": "1.0.0",
+  "description": "MCP bridge exposing ArchiMate models in Archi to AI agents"
+}

@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0 (2026-07-05)
+## v1.0.0 (2026-09-22)
 
 Initial public release. JGS Archi Bridge is an Eclipse plugin for Archi that embeds an HTTP server speaking the Model Context Protocol (MCP), enabling AI agents to query, analyse, and modify ArchiMate models through natural language.
 

@@ -1,0 +1,17 @@
+# jgs-archi-mcp is not a Smithery-hostable server: it is an HTTP endpoint
+# embedded inside Archi (a licensed desktop GUI application the end user
+# installs and runs themselves), not a standalone process Smithery can spawn
+# or containerize on the user's behalf. There is no stdio launch command and
+# no deployable image; the server only exists while Archi is running with
+# the plugin's "Start MCP Server" menu action invoked, and it only ever
+# binds to the user's own machine (default http://127.0.0.1:18090/mcp).
+#
+# This file exists to satisfy RR-M-07's "author manifests" requirement and
+# to record why: Smithery submission is a documented N/A for this product,
+# not an unmet item. See docs/install.md for the real connection method
+# (point an MCP client's http transport at the local endpoint once Archi
+# and the plugin are running).
+unsupported: true
+reason: >-
+  Desktop-GUI-embedded local HTTP server (runs inside Archi, the end user's
+  own licensed application); nothing for Smithery to spawn or host.
