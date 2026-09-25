@@ -45,6 +45,30 @@ SCAN_GLOBS = ["*.md", "*.txt", "*.cff", "docs/**/*.md", "docs/**/*.html",
 BINARY_SUFFIXES = {".woff2", ".png", ".jpg", ".ico", ".gif", ".pdf", ".zip", ".archiplugin"}
 
 
+def check_site_version(root, release_re):
+    """docs/index.html version strings must equal RELEASE-INFO.txt (ported from jgs-lit-memory)."""
+    m = re.search(release_re, (root / "RELEASE-INFO.txt").read_text(encoding="utf-8"), re.M)
+    if not m:
+        return ["RELEASE-INFO.txt: no version line"]
+    expected = m.group(1)
+    page = (root / "docs" / "index.html").read_text(encoding="utf-8")
+    loci = {
+        "softwareVersion": r'"softwareVersion":\s*"(\d+\.\d+\.\d+)"',
+        "masthead REV": r"REV <b>(\d+\.\d+\.\d+)</b>",
+        "footer Rev": r'<span class="label">Rev</span><b>(\d+\.\d+\.\d+)</b>',
+    }
+    bad = []
+    for name, pat in loci.items():
+        v = re.search(pat, page)
+        val = v.group(1) if v else None
+        if val != expected:
+            bad.append(f"{name}={val!r} (expected {expected})")
+    if bad:
+        return ["site page version mismatch or missing pattern: " + "; ".join(bad)]
+    print(f"site page versions agree at {expected}")
+    return []
+
+
 def main() -> int:
     fails: list[str] = []
 
@@ -96,6 +120,8 @@ def main() -> int:
         m = re.search(r"^version:\s*(\S+)", citation.read_text(encoding="utf-8"), re.MULTILINE)
         if m and m.group(1) != version:
             fails.append(f"version mismatch: RELEASE-INFO.txt={version}, CITATION.cff={m.group(1)}")
+
+    fails += check_site_version(ROOT, r"^Version:\s*(\d+\.\d+\.\d+)")
 
     if fails:
         print("RELEASE GATE FAILED:", file=sys.stderr)
