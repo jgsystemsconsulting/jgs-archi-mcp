@@ -10,13 +10,13 @@
 <meta property="og:description" content="An Archi plugin that gives AI agents live, undo-able write access to your open ArchiMate model over MCP. 69 tools, native undo, loopback default, human approval gate.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/">
-<meta property="og:image" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/images/og/og-bridge-1200.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/title-card.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="JGS Archi Bridge">
 <meta name="twitter:description" content="Live, undo-able AI write access to your open ArchiMate model in Archi, over the Model Context Protocol. From JG Systems Consulting Ltd.">
-<meta name="twitter:image" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/images/og/og-bridge-1200.jpg">
+<meta name="twitter:image" content="https://jgsystemsconsulting.github.io/jgs-archi-mcp/title-card.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">
 {
@@ -93,6 +93,9 @@ section{padding:var(--pad-section) 0;border-bottom:1px solid var(--line)}
 .actions{margin:1.75rem 0 0;display:flex;flex-wrap:wrap;gap:.75rem}
 .specs{margin-top:2rem;font-family:var(--mono);font-size:0.6875rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:1.25rem 2rem}
 .specs b{color:var(--text-hi);font-weight:700}
+.hero{display:grid;gap:2.5rem;align-items:center}
+@media(min-width:900px){.hero{grid-template-columns:1.15fr .85fr}}
+.hero-media img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line)}
 .steps{list-style:none;margin:0;padding:0;counter-reset:step;display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 .steps li{background:var(--ink-2);padding:1.5rem;counter-increment:step;position:relative;min-width:0}
 .steps li::before{content:counter(step,decimal-leading-zero);font-family:var(--mono);font-weight:700;color:var(--mute-2);font-size:0.75rem;letter-spacing:0.12em;display:block;margin-bottom:.6rem}
@@ -133,6 +136,8 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--text-hi);outline-offs
 
   <section id="home">
     <div class="sec-num">&sect; 00 - JGS ARCHI BRIDGE</div>
+    <div class="hero">
+    <div class="hero-copy">
     <h1>AI agents that edit your live ArchiMate model, not a copy of it.</h1>
     <p class="lede">JGS Archi Bridge is an Eclipse plugin for <a href="https://www.archimatetool.com/">Archi</a> that
     embeds an HTTP server speaking the <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> inside a
@@ -153,6 +158,11 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--text-hi);outline-offs
       <span>Java <b>21+</b></span>
       <span><b>MIT</b> licensed</span>
       <span><b>4,082</b> tests / <b>181</b> classes</span>
+    </div>
+    </div>
+    <div class="hero-media">
+      <img src="title-card.png" alt="jgs-archi-mcp skill overview title card: Eclipse plugin exposing ArchiMate models to AI agents over MCP, with QR code linking to the repository" width="1280" height="720">
+    </div>
     </div>
   </section>
 
